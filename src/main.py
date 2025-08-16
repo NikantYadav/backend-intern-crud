@@ -22,26 +22,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# create tables on startup (async) with explicit order
+
 @app.on_event("startup")
 async def startup():
     async with engine.begin() as conn:
-        # Create tables one by one in correct order
-        # First drop existing tables in reverse order if they exist
         try:
-            # Disable foreign key checks temporarily
             await conn.execute(text("SET FOREIGN_KEY_CHECKS=0"))
             
-            # Drop existing tables in reverse order
             await conn.execute(text("DROP TABLE IF EXISTS likes"))
             await conn.execute(text("DROP TABLE IF EXISTS comments"))
             await conn.execute(text("DROP TABLE IF EXISTS posts"))
             await conn.execute(text("DROP TABLE IF EXISTS users"))
             
-            # Re-enable foreign key checks
             await conn.execute(text("SET FOREIGN_KEY_CHECKS=1"))
             
-            # Create tables in correct order with explicit data types
             await conn.execute(text('''
                 CREATE TABLE users (
                     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -90,13 +84,11 @@ async def startup():
         except Exception as e:
             print(f"Error creating tables with raw SQL: {e}")
             try:
-                # If direct SQL fails, try the SQLAlchemy approach
                 await conn.run_sync(Base.metadata.create_all)
                 print("Tables created successfully using SQLAlchemy")
             except Exception as e2:
                 print(f"Error creating tables with SQLAlchemy: {e2}")
 
-# include routers
 app.include_router(auth.router)
 app.include_router(posts.router)
 app.include_router(like.router)

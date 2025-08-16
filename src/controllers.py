@@ -14,8 +14,6 @@ import os
 
 load_dotenv()
 
-
-# Auth / helpers configuration
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
@@ -56,7 +54,7 @@ async def get_user_by_id(db: AsyncSession, user_id: int):
     return q.scalars().first()
 
 
-# Dependency: current user from token
+# current user from token
 async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,

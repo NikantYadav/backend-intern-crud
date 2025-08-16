@@ -19,7 +19,6 @@ from .database import Base
 class User(Base):
     __tablename__ = "users"
     id = Column(INTEGER, primary_key=True, autoincrement=True)
-    # set explicit length for MySQL VARCHAR
     username = Column(String(150), unique=True, nullable=False, index=True)
     password = Column(String(255), nullable=False)
 
@@ -31,7 +30,6 @@ class User(Base):
 class Post(Base):
     __tablename__ = "posts"
     id = Column(INTEGER, primary_key=True, autoincrement=True)
-    # set explicit length for MySQL VARCHAR
     title = Column(String(255), nullable=False)
     content = Column(Text, nullable=False)
     author_id = Column(INTEGER, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
