@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 
 from ..controllers import get_current_user, get_db
-from ..models import Post, User
+from ..models import Post, User, Like, Comment
 from ..schemas import PostCreate, PostOut, PostUpdate
 
 router = APIRouter(prefix="/api/posts")
