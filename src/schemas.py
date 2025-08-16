@@ -50,3 +50,8 @@ class CommentOut(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class DeleteResponse(BaseModel):
+    message: str
+    deleted_id: int
